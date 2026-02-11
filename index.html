@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise 💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    text-align:center;
+    color:white;
+    overflow:hidden;
+    background: linear-gradient(-45deg,#ff4e75,#ff758f,#ff8fa3,#ffc2d1);
+    background-size:400% 400%;
+    animation:gradient 10s ease infinite;
+}
+
+@keyframes gradient{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.page{
+    display:none;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:90%;
+}
+
+button{
+    padding:12px 25px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    margin:10px;
+    cursor:pointer;
+}
+
+.yes{
+    background:#ff1744;
+    color:white;
+}
+
+.no{
+    background:white;
+    color:#ff1744;
+    position:relative;
+}
+
+.heart{
+    font-size:60px;
+    animation:beat 1s infinite;
+}
+
+@keyframes beat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+.fade{
+    animation:fade 1s;
+}
+
+@keyframes fade{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="page" id="page1">
+    <h1>A Special Surprise For You 💫</h1>
+    <button onclick="nextPage(2)">Start 💖</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+    <h1 id="typing"></h1>
+    <button onclick="nextPage(3)">Next 💌</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+    <h1>You are my peace, my happiness, my everything 💕</h1>
+    <div class="heart">💖</div>
+    <button onclick="nextPage(4)">Continue 💞</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+    <h1>Will You Be My Valentine? 💍</h1>
+    <button class="yes" onclick="celebrate()">YES 💖</button>
+    <button class="no" id="noBtn">No 😢</button>
+</div>
+
+<script>
+
+let current = 1;
+document.getElementById("page1").style.display="block";
+
+function nextPage(num){
+    document.getElementById("page"+current).style.display="none";
+    document.getElementById("page"+num).style.display="block";
+    document.getElementById("page"+num).classList.add("fade");
+    current = num;
+
+    if(num==2){
+        typeText("You are the most beautiful part of my life 💖");
+    }
+}
+
+function typeText(text){
+    let i=0;
+    let speed=50;
+    let target=document.getElementById("typing");
+    target.innerHTML="";
+    function typing(){
+        if(i<text.length){
+            target.innerHTML+=text.charAt(i);
+            i++;
+            setTimeout(typing,speed);
+        }
+    }
+    typing();
+}
+
+// Escaping NO button
+let noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseover",function(){
+    let x=Math.random()*300-150;
+    let y=Math.random()*200-100;
+    noBtn.style.transform=`translate(${x}px,${y}px)`;
+});
+
+function celebrate(){
+    alert("YAYYYYY 💖 This is just the beginning of our forever 💕✨");
+
+    for(let i=0;i<50;i++){
+        let heart=document.createElement("div");
+        heart.innerHTML="💘";
+        heart.style.position="absolute";
+        heart.style.left=Math.random()*window.innerWidth+"px";
+        heart.style.top=Math.random()*window.innerHeight+"px";
+        heart.style.fontSize="30px";
+        document.body.appendChild(heart);
+    }
+}
+</script>
+
+</body>
+</html>
