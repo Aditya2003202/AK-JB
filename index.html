@@ -3,26 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Surprise 💖</title>
+<title>Our Love Story 💖</title>
 
 <style>
 body{
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    text-align:center;
-    color:white;
+    font-family:'Segoe UI',sans-serif;
     overflow:hidden;
-    background: linear-gradient(-45deg,#ff4e75,#ff758f,#ff8fa3,#ffc2d1);
-    background-size:400% 400%;
-    animation:gradient 10s ease infinite;
+    color:white;
+    text-align:center;
+    background:black;
 }
 
-@keyframes gradient{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+/* Star Background */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
 }
 
+/* Pages */
 .page{
     display:none;
     position:absolute;
@@ -30,6 +31,12 @@ body{
     left:50%;
     transform:translate(-50%,-50%);
     width:90%;
+    animation:fade 1.2s ease;
+}
+
+@keyframes fade{
+    from{opacity:0; transform:translate(-50%,-40%);}
+    to{opacity:1; transform:translate(-50%,-50%);}
 }
 
 button{
@@ -39,6 +46,11 @@ button{
     border-radius:30px;
     margin:10px;
     cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
 }
 
 .yes{
@@ -52,101 +64,241 @@ button{
     position:relative;
 }
 
+input{
+    padding:10px;
+    font-size:18px;
+    border-radius:20px;
+    border:none;
+    text-align:center;
+}
+
+/* Heartbeat */
 .heart{
-    font-size:60px;
+    font-size:80px;
     animation:beat 1s infinite;
 }
 
 @keyframes beat{
     0%{transform:scale(1);}
-    50%{transform:scale(1.2);}
+    50%{transform:scale(1.3);}
     100%{transform:scale(1);}
 }
 
-.fade{
-    animation:fade 1s;
+/* Love Meter */
+.bar{
+    width:80%;
+    height:20px;
+    background:white;
+    margin:20px auto;
+    border-radius:20px;
+    overflow:hidden;
 }
 
-@keyframes fade{
-    from{opacity:0;}
-    to{opacity:1;}
+.fill{
+    height:100%;
+    width:0%;
+    background:#ff1744;
+    border-radius:20px;
+    transition:2s;
+}
+
+/* Main Photo */
+.photo-frame{
+    margin-top:20px;
+}
+
+.photo-frame img{
+    width:220px;
+    height:220px;
+    object-fit:cover;
+    border-radius:50%;
+    border:6px solid #ff1744;
+    box-shadow:0 0 30px #ff1744;
+    animation:zoomIn 1.5s ease;
+}
+
+@keyframes zoomIn{
+    from{transform:scale(0);}
+    to{transform:scale(1);}
+}
+
+/* Slideshow */
+.slideshow{
+    margin-top:20px;
+    position:relative;
+    width:250px;
+    height:250px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:20px;
+    opacity:0;
+    transition:opacity 1.5s ease-in-out;
+    box-shadow:0 0 30px #ff1744;
+}
+
+.slide.active{
+    opacity:1;
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="bg"></canvas>
+
 <!-- PAGE 1 -->
-<div class="page" id="page1">
-    <h1>A Special Surprise For You 💫</h1>
-    <button onclick="nextPage(2)">Start 💖</button>
+<div class="page" id="p1">
+    <h1>✨ A Magical Surprise ✨</h1>
+    <p>Something special is waiting for you...</p>
+    <button onclick="next(2)">Begin 💖</button>
 </div>
 
 <!-- PAGE 2 -->
-<div class="page" id="page2">
-    <h1 id="typing"></h1>
-    <button onclick="nextPage(3)">Next 💌</button>
+<div class="page" id="p2">
+    <h2>Enter Your Name 💕</h2>
+    <input id="nameInput" placeholder="Your name here">
+    <br><br>
+    <button onclick="saveName()">Continue 💌</button>
 </div>
 
 <!-- PAGE 3 -->
-<div class="page" id="page3">
-    <h1>You are my peace, my happiness, my everything 💕</h1>
-    <div class="heart">💖</div>
-    <button onclick="nextPage(4)">Continue 💞</button>
+<div class="page" id="p3">
+    <h1 id="typing"></h1>
+
+    <div class="photo-frame">
+        <img src="main.jpg">
+    </div>
+
+    <button onclick="next(4)">Next 💞</button>
 </div>
 
 <!-- PAGE 4 -->
-<div class="page" id="page4">
-    <h1>Will You Be My Valentine? 💍</h1>
+<div class="page" id="p4">
+    <h2>Our Love Meter 💓</h2>
+    <div class="bar">
+        <div class="fill" id="loveBar"></div>
+    </div>
+    <p>Click anywhere to fill our love ❤️</p>
+    <button onclick="next(5)">Continue 💘</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="p5">
+    <h1 id="proposal"></h1>
+    <div class="heart">💖</div>
     <button class="yes" onclick="celebrate()">YES 💖</button>
     <button class="no" id="noBtn">No 😢</button>
 </div>
 
+<!-- PAGE 6 -->
+<div class="page" id="p6">
+    <h1>💍 FOREVER STARTS NOW 💍</h1>
+    <h2 id="foreverMsg"></h2>
+
+    <div class="slideshow">
+        <img class="slide active" src="images/photo1.jpg">
+        <img class="slide" src="images/photo2.jpg">
+        <img class="slide" src="images/photo10.jpg">
+    </div>
+</div>
+
 <script>
 
-let current = 1;
-document.getElementById("page1").style.display="block";
+/* Star Background */
+let canvas=document.getElementById("bg");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-function nextPage(num){
-    document.getElementById("page"+current).style.display="none";
-    document.getElementById("page"+num).style.display="block";
-    document.getElementById("page"+num).classList.add("fade");
-    current = num;
-
-    if(num==2){
-        typeText("You are the most beautiful part of my life 💖");
-    }
+let stars=[];
+for(let i=0;i<150;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        size:Math.random()*2
+    });
 }
 
+function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+        ctx.fill();
+    });
+}
+setInterval(drawStars,50);
+
+/* Page System */
+let current=1;
+let userName="";
+document.getElementById("p1").style.display="block";
+
+function next(num){
+    document.getElementById("p"+current).style.display="none";
+    document.getElementById("p"+num).style.display="block";
+    current=num;
+}
+
+/* Save Name */
+function saveName(){
+    let name=document.getElementById("nameInput").value;
+    if(name.trim()==""){
+        alert("Please enter your beautiful name 💕");
+        return;
+    }
+    userName=name;
+    next(3);
+    typeText(`${userName}, you are the most beautiful part of my life 💖`);
+}
+
+/* Typing Effect */
 function typeText(text){
     let i=0;
-    let speed=50;
     let target=document.getElementById("typing");
     target.innerHTML="";
     function typing(){
         if(i<text.length){
             target.innerHTML+=text.charAt(i);
             i++;
-            setTimeout(typing,speed);
+            setTimeout(typing,50);
+        }else{
+            document.getElementById("proposal").innerHTML=
+            `${userName}, Will You Be My Valentine? 💍`;
+            document.getElementById("foreverMsg").innerHTML=
+            `${userName}, this is just the beginning of our forever 💕✨`;
         }
     }
     typing();
 }
 
-// Escaping NO button
+/* Love Meter */
+document.getElementById("p4").addEventListener("click",()=>{
+    document.getElementById("loveBar").style.width="100%";
+});
+
+/* Escaping NO */
 let noBtn=document.getElementById("noBtn");
-noBtn.addEventListener("mouseover",function(){
+noBtn.addEventListener("mouseover",()=>{
     let x=Math.random()*300-150;
     let y=Math.random()*200-100;
     noBtn.style.transform=`translate(${x}px,${y}px)`;
 });
 
+/* Celebration */
 function celebrate(){
-    alert("YAYYYYY 💖 This is just the beginning of our forever 💕✨");
-
-    for(let i=0;i<50;i++){
+    next(6);
+    for(let i=0;i<120;i++){
         let heart=document.createElement("div");
-        heart.innerHTML="💘";
+        heart.innerHTML=["💖","💘","✨","🌸"][Math.floor(Math.random()*4)];
         heart.style.position="absolute";
         heart.style.left=Math.random()*window.innerWidth+"px";
         heart.style.top=Math.random()*window.innerHeight+"px";
@@ -154,6 +306,20 @@ function celebrate(){
         document.body.appendChild(heart);
     }
 }
+
+/* Slideshow */
+let slides=document.querySelectorAll(".slide");
+let index=0;
+
+function showSlide(){
+    slides.forEach(s=>s.classList.remove("active"));
+    index++;
+    if(index>=slides.length){ index=0; }
+    slides[index].classList.add("active");
+}
+
+setInterval(showSlide,3000);
+
 </script>
 
 </body>
