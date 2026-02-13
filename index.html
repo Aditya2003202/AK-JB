@@ -92,11 +92,7 @@ input{
     transition:2s;
 }
 
-/* Circle Photo (Page 3) */
-.photo-frame{
-    margin-top:20px;
-}
-
+/* Circle Photo */
 .photo-frame img{
     width:220px;
     height:220px;
@@ -109,11 +105,8 @@ input{
 /* Moving Slideshow */
 .slideshow{
     position:absolute;
-    width:250px;
-    height:250px;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+    width:260px;
+    height:260px;
     transition:all 1.5s ease-in-out;
 }
 
@@ -124,12 +117,25 @@ input{
     object-fit:cover;
     border-radius:20px;
     opacity:0;
-    transition:opacity 1.5s ease-in-out;
+    transition:opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
     box-shadow:0 0 30px #ff1744;
 }
 
 .slide.active{
     opacity:1;
+    transform:scale(1.05);
+}
+
+/* Floating Sparkles */
+.sparkle{
+    position:absolute;
+    font-size:20px;
+    animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    0%{ transform:translateY(100vh); opacity:1;}
+    100%{ transform:translateY(-10vh); opacity:0;}
 }
 </style>
 </head>
@@ -156,11 +162,9 @@ input{
 <!-- PAGE 3 -->
 <div class="page" id="p3">
     <h1 id="typing"></h1>
-
     <div class="photo-frame">
-        <img src="photo1.jpg" alt="Love Photo">
+        <img src="photo1.jpg">
     </div>
-
     <button onclick="next(4)">Next 💞</button>
 </div>
 
@@ -190,13 +194,13 @@ input{
     <div class="slideshow">
         <img class="slide active" src="photo1.jpg">
         <img class="slide" src="photo2.jpg">
-        <img class="slide" src="photo10.jpg">
+        <img class="slide" src="photo3.jpg">
     </div>
 </div>
 
 <script>
 
-/* Star Background */
+/* Star Background Animation */
 let canvas=document.getElementById("bg");
 let ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -207,7 +211,8 @@ for(let i=0;i<150;i++){
     stars.push({
         x:Math.random()*canvas.width,
         y:Math.random()*canvas.height,
-        size:Math.random()*2
+        size:Math.random()*2,
+        speed:Math.random()*0.5
     });
 }
 
@@ -215,12 +220,14 @@ function drawStars(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle="white";
     stars.forEach(s=>{
+        s.y+=s.speed;
+        if(s.y>canvas.height){ s.y=0; }
         ctx.beginPath();
         ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
         ctx.fill();
     });
 }
-setInterval(drawStars,50);
+setInterval(drawStars,30);
 
 /* Page System */
 let current=1;
@@ -233,19 +240,14 @@ function next(num){
     current=num;
 }
 
-/* Save Name */
 function saveName(){
     let name=document.getElementById("nameInput").value;
-    if(name.trim()==""){
-        alert("Please enter your beautiful name 💕");
-        return;
-    }
+    if(name.trim()==""){ alert("Please enter your beautiful name 💕"); return; }
     userName=name;
     next(3);
-    typeText(`${userName}, you are the most beautiful part of my life 💖`);
+    typeText(`${userName}, you are my forever and always 💖`);
 }
 
-/* Typing Effect */
 function typeText(text){
     let i=0;
     let target=document.getElementById("typing");
@@ -257,9 +259,9 @@ function typeText(text){
             setTimeout(typing,50);
         }else{
             document.getElementById("proposal").innerHTML=
-            `${userName}, Will You Be My Valentine? 💍`;
+            `${userName}, Will You Be Mine Forever? 💍`;
             document.getElementById("foreverMsg").innerHTML=
-            `${userName}, this is just the beginning of our forever 💕✨`;
+            `${userName}, this is just the beginning of our infinity 💕✨`;
         }
     }
     typing();
@@ -281,34 +283,48 @@ noBtn.addEventListener("mouseover",()=>{
 /* Celebration */
 function celebrate(){
     next(6);
-    for(let i=0;i<120;i++){
-        let heart=document.createElement("div");
-        heart.innerHTML=["💖","💘","✨","🌸"][Math.floor(Math.random()*4)];
-        heart.style.position="absolute";
-        heart.style.left=Math.random()*window.innerWidth+"px";
-        heart.style.top=Math.random()*window.innerHeight+"px";
-        heart.style.fontSize="30px";
-        document.body.appendChild(heart);
-    }
+
+    setInterval(()=>{
+        let sparkle=document.createElement("div");
+        sparkle.className="sparkle";
+        sparkle.innerHTML=["💖","✨","🌸","💘"][Math.floor(Math.random()*4)];
+        sparkle.style.left=Math.random()*100+"vw";
+        sparkle.style.animationDuration=(Math.random()*3+3)+"s";
+        document.body.appendChild(sparkle);
+        setTimeout(()=>{ sparkle.remove(); },6000);
+    },300);
 }
 
-/* Moving Slideshow */
+/* SLIDESHOW POSITION CONTROL */
 let slides=document.querySelectorAll(".slide");
 let slideshow=document.querySelector(".slideshow");
 let index=0;
 
+const positions=[
+    {top:"10%", left:"50%"},
+    {bottom:"10%", left:"50%"},
+    {top:"50%", left:"10%"},
+    {top:"50%", right:"10%"},
+    {top:"30%", left:"30%"}
+];
+
 function showSlide(){
     slides.forEach(s=>s.classList.remove("active"));
-    index++;
-    if(index>=slides.length){ index=0; }
+    index=(index+1)%slides.length;
     slides[index].classList.add("active");
 
-    let randomTop=Math.random()*60+20;
-    let randomLeft=Math.random()*60+20;
+    let pos=positions[Math.floor(Math.random()*positions.length)];
 
-    slideshow.style.top=randomTop+"%";
-    slideshow.style.left=randomLeft+"%";
-    slideshow.style.transform="translate(-50%, -50%)";
+    slideshow.style.top="";
+    slideshow.style.bottom="";
+    slideshow.style.left="";
+    slideshow.style.right="";
+
+    for(let key in pos){
+        slideshow.style[key]=pos[key];
+    }
+
+    slideshow.style.transform="translate(-50%,-50%)";
 }
 
 setInterval(showSlide,3000);
