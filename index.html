@@ -15,7 +15,6 @@ body{
     background:black;
 }
 
-/* Star Background */
 canvas{
     position:fixed;
     top:0;
@@ -23,7 +22,6 @@ canvas{
     z-index:-1;
 }
 
-/* Pages */
 .page{
     display:none;
     position:absolute;
@@ -62,7 +60,6 @@ input{
     text-align:center;
 }
 
-/* Heartbeat */
 .heart{
     font-size:80px;
     animation:beat 1s infinite;
@@ -74,7 +71,6 @@ input{
     100%{transform:scale(1);}
 }
 
-/* Love Meter */
 .bar{
     width:80%;
     height:20px;
@@ -92,7 +88,6 @@ input{
     transition:2s;
 }
 
-/* Circle Photo */
 .photo-frame img{
     width:220px;
     height:220px;
@@ -102,7 +97,6 @@ input{
     box-shadow:0 0 30px #ff1744;
 }
 
-/* Moving Slideshow */
 .slideshow{
     position:absolute;
     width:260px;
@@ -126,7 +120,6 @@ input{
     transform:scale(1.05);
 }
 
-/* Floating Sparkles */
 .sparkle{
     position:absolute;
     font-size:20px;
@@ -144,14 +137,12 @@ input{
 
 <canvas id="bg"></canvas>
 
-<!-- PAGE 1 -->
 <div class="page" id="p1">
     <h1>✨ A Magical Surprise ✨</h1>
     <p>Something special is waiting for you...</p>
     <button onclick="next(2)">Begin 💖</button>
 </div>
 
-<!-- PAGE 2 -->
 <div class="page" id="p2">
     <h2>Enter Your Name 💕</h2>
     <input id="nameInput" placeholder="Your name here">
@@ -159,7 +150,6 @@ input{
     <button onclick="saveName()">Continue 💌</button>
 </div>
 
-<!-- PAGE 3 -->
 <div class="page" id="p3">
     <h1 id="typing"></h1>
     <div class="photo-frame">
@@ -168,7 +158,6 @@ input{
     <button onclick="next(4)">Next 💞</button>
 </div>
 
-<!-- PAGE 4 -->
 <div class="page" id="p4">
     <h2>Our Love Meter 💓</h2>
     <div class="bar">
@@ -178,7 +167,6 @@ input{
     <button onclick="next(5)">Continue 💘</button>
 </div>
 
-<!-- PAGE 5 -->
 <div class="page" id="p5">
     <h1 id="proposal"></h1>
     <div class="heart">💖</div>
@@ -186,7 +174,6 @@ input{
     <button class="no" id="noBtn">No 😢</button>
 </div>
 
-<!-- PAGE 6 -->
 <div class="page" id="p6">
     <h1>💍 FOREVER STARTS NOW 💍</h1>
     <h2 id="foreverMsg"></h2>
@@ -200,7 +187,6 @@ input{
 
 <script>
 
-/* Star Background Animation */
 let canvas=document.getElementById("bg");
 let ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -229,7 +215,6 @@ function drawStars(){
 }
 setInterval(drawStars,30);
 
-/* Page System */
 let current=1;
 let userName="";
 document.getElementById("p1").style.display="block";
@@ -240,10 +225,21 @@ function next(num){
     current=num;
 }
 
+/* 🔐 Only Jagrity Allowed */
 function saveName(){
-    let name=document.getElementById("nameInput").value;
-    if(name.trim()==""){ alert("Please enter your beautiful name 💕"); return; }
-    userName=name;
+    let name=document.getElementById("nameInput").value.trim();
+
+    if(name === ""){
+        alert("Please enter your beautiful name 💕");
+        return;
+    }
+
+    if(name.toLowerCase() !== "jagrity"){
+        alert("Oops! This surprise is only for Jagrity 💖");
+        return;
+    }
+
+    userName="Jagrity";
     next(3);
     typeText(`${userName}, you are my forever and always 💖`);
 }
@@ -267,12 +263,10 @@ function typeText(text){
     typing();
 }
 
-/* Love Meter */
 document.getElementById("p4").addEventListener("click",()=>{
     document.getElementById("loveBar").style.width="100%";
 });
 
-/* Escaping NO */
 let noBtn=document.getElementById("noBtn");
 noBtn.addEventListener("mouseover",()=>{
     let x=Math.random()*300-150;
@@ -280,7 +274,6 @@ noBtn.addEventListener("mouseover",()=>{
     noBtn.style.transform=`translate(${x}px,${y}px)`;
 });
 
-/* Celebration */
 function celebrate(){
     next(6);
 
@@ -295,7 +288,7 @@ function celebrate(){
     },300);
 }
 
-/* SLIDESHOW POSITION CONTROL */
+/* Slideshow Movement */
 let slides=document.querySelectorAll(".slide");
 let slideshow=document.querySelector(".slideshow");
 let index=0;
@@ -304,8 +297,7 @@ const positions=[
     {top:"10%", left:"50%"},
     {bottom:"10%", left:"50%"},
     {top:"50%", left:"10%"},
-    {top:"50%", right:"10%"},
-    {top:"30%", left:"30%"}
+    {top:"50%", right:"10%"}
 ];
 
 function showSlide(){
@@ -323,8 +315,6 @@ function showSlide(){
     for(let key in pos){
         slideshow.style[key]=pos[key];
     }
-
-    slideshow.style.transform="translate(-50%,-50%)";
 }
 
 setInterval(showSlide,3000);
