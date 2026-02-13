@@ -102,7 +102,7 @@ input{
     transition:2s;
 }
 
-/* Main Photo */
+/* Circle Photo */
 .photo-frame{
     margin-top:20px;
 }
@@ -114,12 +114,6 @@ input{
     border-radius:50%;
     border:6px solid #ff1744;
     box-shadow:0 0 30px #ff1744;
-    animation:zoomIn 1.5s ease;
-}
-
-@keyframes zoomIn{
-    from{transform:scale(0);}
-    to{transform:scale(1);}
 }
 
 /* Slideshow */
@@ -172,8 +166,9 @@ input{
 <div class="page" id="p3">
     <h1 id="typing"></h1>
 
+    <!-- Circle Image -->
     <div class="photo-frame">
-        <img src="./main.jpg">
+        <img src="photo3.jpg" alt="Love Photo">
     </div>
 
     <button onclick="next(4)">Next 💞</button>
@@ -202,10 +197,11 @@ input{
     <h1>💍 FOREVER STARTS NOW 💍</h1>
     <h2 id="foreverMsg"></h2>
 
+    <!-- Slideshow -->
     <div class="slideshow">
-        <img class="slide active" src="./photo1.jpg">
-        <img class="slide" src="./photo2.jpg">
-        <img class="slide" src="./photo10.jpg">
+        <img class="slide active" src="photo1.jpg">
+        <img class="slide" src="photo2.jpg">
+        <img class="slide" src="photo10.jpg">
     </div>
 </div>
 
