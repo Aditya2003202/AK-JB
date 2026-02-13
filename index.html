@@ -49,20 +49,10 @@ button{
     transition:0.3s;
 }
 
-button:hover{
-    transform:scale(1.1);
-}
+button:hover{ transform:scale(1.1); }
 
-.yes{
-    background:#ff1744;
-    color:white;
-}
-
-.no{
-    background:white;
-    color:#ff1744;
-    position:relative;
-}
+.yes{ background:#ff1744; color:white; }
+.no{ background:white; color:#ff1744; position:relative; }
 
 input{
     padding:10px;
@@ -102,7 +92,7 @@ input{
     transition:2s;
 }
 
-/* Circle Photo */
+/* Circle Photo (Page 3) */
 .photo-frame{
     margin-top:20px;
 }
@@ -116,14 +106,15 @@ input{
     box-shadow:0 0 30px #ff1744;
 }
 
-/* Slideshow */
+/* Moving Slideshow */
 .slideshow{
-    margin-top:20px;
-    position:relative;
+    position:absolute;
     width:250px;
     height:250px;
-    margin-left:auto;
-    margin-right:auto;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    transition:all 1.5s ease-in-out;
 }
 
 .slide{
@@ -166,7 +157,6 @@ input{
 <div class="page" id="p3">
     <h1 id="typing"></h1>
 
-    <!-- Circle Image -->
     <div class="photo-frame">
         <img src="photo1.jpg" alt="Love Photo">
     </div>
@@ -197,7 +187,6 @@ input{
     <h1>💍 FOREVER STARTS NOW 💍</h1>
     <h2 id="foreverMsg"></h2>
 
-    <!-- Slideshow -->
     <div class="slideshow">
         <img class="slide active" src="photo1.jpg">
         <img class="slide" src="photo2.jpg">
@@ -303,8 +292,9 @@ function celebrate(){
     }
 }
 
-/* Slideshow */
+/* Moving Slideshow */
 let slides=document.querySelectorAll(".slide");
+let slideshow=document.querySelector(".slideshow");
 let index=0;
 
 function showSlide(){
@@ -312,6 +302,13 @@ function showSlide(){
     index++;
     if(index>=slides.length){ index=0; }
     slides[index].classList.add("active");
+
+    let randomTop=Math.random()*60+20;
+    let randomLeft=Math.random()*60+20;
+
+    slideshow.style.top=randomTop+"%";
+    slideshow.style.left=randomLeft+"%";
+    slideshow.style.transform="translate(-50%, -50%)";
 }
 
 setInterval(showSlide,3000);
